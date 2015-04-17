@@ -231,8 +231,8 @@ class Chosen extends AbstractChosen
     if @is_multiple and @max_selected_options <= this.choices_count()
       @form_field_jq.trigger("chosen:maxselected", {chosen: this})
       return false
-			
-		@form_field_jq.trigger("chosen:before_showing_dropdown", {chosen: this})
+
+    @form_field_jq.trigger("chosen:before_showing_dropdown", {chosen: this})
 
     @container.addClass "chosen-with-drop"
     @results_showing = true
