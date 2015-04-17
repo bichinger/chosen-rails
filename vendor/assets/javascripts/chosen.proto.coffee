@@ -8,7 +8,7 @@ class @Chosen extends AbstractChosen
     super()
 
     # HTML Templates
-    @single_temp = new Template('<a class="chosen-single chosen-default" tabindex="-1"><span>#{default}</span><div><b></b></div></a><div class="chosen-drop"><div class="chosen-search"><input type="text" autocomplete="off" /></div><ul class="chosen-results"></ul></div>')
+    @single_temp = new Template('<a class="chosen-single chosen-default"><span>#{default}</span><div><b></b></div></a><div class="chosen-drop"><div class="chosen-search"><input type="text" autocomplete="off" /></div><ul class="chosen-results"></ul></div>')
     @multi_temp = new Template('<ul class="chosen-choices"><li class="search-field"><input type="text" value="#{default}" class="default" autocomplete="off" style="width:25px;" /></li></ul><div class="chosen-drop"><ul class="chosen-results"></ul></div>')
     @no_results_temp = new Template('<li class="no-results">' + @results_none_found + ' "<span>#{terms}</span>"</li>')
 
@@ -224,6 +224,8 @@ class @Chosen extends AbstractChosen
     if @is_multiple and @max_selected_options <= this.choices_count()
       @form_field.fire("chosen:maxselected", {chosen: this})
       return false
+			
+		@form_field.fire("chosen:before_showing_dropdown", {chosen: this})
 
     @container.addClassName "chosen-with-drop"
     @results_showing = true
@@ -352,8 +354,7 @@ class @Chosen extends AbstractChosen
         this.single_set_selected_text(this.choice_label(item))
 
       this.results_hide() unless (evt.metaKey or evt.ctrlKey) and @is_multiple
-
-      @search_field.value = ""
+      this.show_search_field_default()
 
       @form_field.simulate("change") if typeof Event.simulate is 'function' && (@is_multiple || @form_field.selectedIndex != @current_selectedIndex)
       @current_selectedIndex = @form_field.selectedIndex
